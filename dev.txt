@@ -1,0 +1,50 @@
+vi .bash_profile
+
+M2_HOME=/maven
+M2=/maven/bin
+JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.X86_64
+PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2_HOME:$M2
+export PATH
+
+tomcat
+
+find / -name context.xml
+(last 2 file open with vi and put valve in comments)
+tomcat/conf
+#vi tomcat-users.xml
+add roles
+
+docker
+manual image(dockerfile)
+
+FROM fedora
+RUN yum install java -y
+RUN mkdir /opt/tomcat
+WORKDIR /opt/tomcat
+ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz .
+run tar -xvzf apache-tomcat-9.0.83.tar.gz
+RUN mv apache-tomcat-9.0.83/* /opt/tomcat
+EXPOSE 8080
+CMD ["/opt/tomcat/bin/catalina.sh","run"]
+
+ec2-user
+ll -a
+sudo su -
+cd /opt
+mkdir docker
+cd docker
+chown -R dockercseb:dockercseb /opt/docker
+ll -a
+vi dockerfile
+FROM  tomcat
+RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+COPY ./*.war /usr/local/tomcat/webapps
+
+docker build -t tom1
+docker run -d --name tomcat -p 8088:8080 tom1
+
+FROM  tomcat
+RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+COPY ./*.war /usr/local/tomcat/webapps
+
+
